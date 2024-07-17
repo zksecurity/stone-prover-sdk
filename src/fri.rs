@@ -1,8 +1,8 @@
 use crate::models::{FriParameters, ProverParameters, StarkParameters, Verifier};
 
 const DEFAULT_LAST_LAYER_DEGREE_BOUND: u32 = 64;
-const DEFAULT_N_QUERIES: u32 = 18;
-const DEFAULT_PROOF_OF_WORK_BITS: u32 = 24;
+const DEFAULT_N_QUERIES: u32 = 16;
+const DEFAULT_PROOF_OF_WORK_BITS: u32 = 32;
 
 /// Implements ceil(log2(x)).
 fn ceil_log2(x: u32) -> u32 {
@@ -57,8 +57,13 @@ impl FriComputer for DefaultFriComputer {
         let last_layer_degree_bound_log = ceil_log2(last_layer_degree_bound);
         let max_step_value = 4;
 
-        let fri_steps =
-            compute_fri_steps(nb_steps_log, last_layer_degree_bound_log, max_step_value);
+        // The first FRI step must be 0
+        let mut fri_steps = vec![0];
+        fri_steps.extend(compute_fri_steps(
+            nb_steps_log,
+            last_layer_degree_bound_log,
+            max_step_value,
+        ));
 
         FriParameters {
             fri_step_list: fri_steps,
