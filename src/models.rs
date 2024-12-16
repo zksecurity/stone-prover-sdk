@@ -109,6 +109,8 @@ pub enum Layout {
     AllSolidity,
     #[serde(rename = "starknet_with_keccak")]
     StarknetWithKeccak,
+    #[serde(rename = "dynamic")]
+    Dynamic,
 }
 
 impl FromStr for Layout {
